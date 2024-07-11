@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Product
+from .models import Product, Category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -7,11 +7,30 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm
 from django import forms
 
+def all_categories():
+    categories = Category.objects.all()
+    return categories
+
 
 # Create your views here.
 def home(request):
     products = Product.objects.all()
-    return render(request, "store/index.html", {'products': products})
+    return render(request, "store/index.html", {'products': products, 'categories': all_categories()})
+
+
+def category(request, foo):
+    # replace spaces with hyphens
+    # foo = foo.replace(' ', '_')
+
+    # grab category from the url
+    try:
+        # look up category
+        product_category = Category.objects.get(name=foo)
+        products = Product.objects.filter(category=product_category)
+        return render(request, "store/category.html", {'products': products, 'category': product_category, 'categories': all_categories()})
+    except:
+        messages.success(request, "There is no such category")
+        return redirect('home')
 
 
 def product_page(request, pk):
