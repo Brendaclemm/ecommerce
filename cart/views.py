@@ -1,13 +1,41 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from .cart import Cart
+from store.models import Product
+from django.http import JsonResponse
 
 
 # Create your views here.
 def cart_summary(request):
-    return render(request, "cart/cart_summary.html", {})
+    cart = Cart(request)
+    cart_products = cart.get_prods()
+    return render(request, "cart/cart_summary.html", {"cart": cart.cart, 'cart_products': cart_products})
 
 
 def cart_add(request):
-    pass
+    # get the cart
+    cart = Cart(request)
+
+    # test for POST
+    if request.POST.get('action') == 'post':
+        # get stuff
+        product_id = int(request.POST.get('product_id'))
+        # lookup product in database
+        product = get_object_or_404(Product, id=product_id)
+
+        # save to session
+        cart.add(product=product)
+
+        # return response
+        # response = JsonResponse({'Product Name: ': product.name})
+        #
+        # return response
+
+        # get cart quantity
+        cart_quantity = cart.__len__()
+
+        response = JsonResponse({'qty': cart_quantity})
+
+        return response
 
 
 def cart_delete(request):

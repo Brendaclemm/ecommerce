@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm
 from django import forms
 
+
 def all_categories():
     categories = Category.objects.all()
     return categories
@@ -27,7 +28,8 @@ def category(request, foo):
         # look up category
         product_category = Category.objects.get(name=foo)
         products = Product.objects.filter(category=product_category)
-        return render(request, "store/category.html", {'products': products, 'category': product_category, 'categories': all_categories()})
+        return render(request, "store/category.html",
+                      {'products': products, 'category': product_category, 'categories': all_categories()})
     except:
         messages.success(request, "There is no such category")
         return redirect('home')
