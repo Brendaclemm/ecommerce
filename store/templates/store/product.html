@@ -5,7 +5,7 @@
 {% block content %}
 
 <br>
-<div class="container">
+<div class="container" style="text-align: center;"> 
     <div class="card mb-3" >
   <div class="row g-0">
     <div class="col-md-4">
@@ -40,6 +40,25 @@
 
         {% endif %}
 
+        <br><br>
+        <div class="row justify-content-center">
+          <div class="col-md-2">Quantity:</div> 
+          <div class="col-md-2">
+            <select class="form-select" id="qty-cart">
+              
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>  
+          </div>
+
+        </div>
+    
+        <br><br>
+
+
         <a href="{% url "home" %}" class="btn btn-secondary">Home</a>
         <button value="{{product.id}}" id="add-to-cart" class="btn btn-secondary">Add to Cart</button>
 
@@ -52,8 +71,9 @@
             $.ajax({
               type: 'POST',
               url: '{% url "cart_add" %}',
-              data: {
+              data:{ 
                 product_id: $('#add-to-cart').val(),
+                product_qty: $('#qty-cart option:selected').text(),
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 action: 'post'
               },
@@ -61,6 +81,7 @@
               success: function(json){
                 //console.log(json)
                 document.getElementById('cart_quantity').textContent = json.qty
+                
               },
 
               error: function(xhr, errmsg, err){
