@@ -1,0 +1,42 @@
+{% extends "store/base.html" %}
+
+{% include "store/navbar.html" %}
+
+{% block content %}
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Update User Info</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Update User Information</p>
+        </div>
+    </div>
+    
+</header>
+<br>
+
+  <!--form-->
+  <div class="container" style="display: flex; justify-content: center;">
+    <form action="{% url "update_info" %}"  method="POST" class="w-25">
+      {% csrf_token %}
+      {{ form.as_p}}
+      <br><br>
+      <button type="submit" class="btn btn-secondary">Update</button>
+    </form>  
+
+    <br><br>
+    {% comment %} <a href="{% url 'update_user' %}" class="btn btn-success">Update User</a> {% endcomment %}
+   
+  </div>
+
+
+
+   
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+
+
+{% endblock content %}
+
